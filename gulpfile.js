@@ -12,6 +12,8 @@ var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
 //optimize css
 var cssnano = require('cssnano');
+//rename files, add .min
+var rename = require('gulp-rename');
 //combine js files
 
 //minify js files
@@ -39,11 +41,15 @@ function style() {
 
     return gulp.src('./app/scss/style.scss')
         .pipe(sass()) // Converts Sass to CSS with gulp-sass
+        .pipe(gulp.dest('./app/css/'))
         //parse CSS once
         //autoprefixer
         //optimization
         .pipe(postcss(plugins))
-        .pipe(gulp.dest('./app/css/'))
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest('./dist/css/'))
 }
 function script() {
     pass
@@ -57,6 +63,8 @@ function watch() {
     });
     gulp.watch('app/*.html', html);
     gulp.watch('./app/*.html').on('change', browserSync.reload);
+    gulp.watch('app/scss/**/*.scss', style);
+    gulp.watch('app/scss/**/*.scss').on('change', browserSync.reload);
 }
 exports.html = html;
 exports.style = style;
