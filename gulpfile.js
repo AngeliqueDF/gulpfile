@@ -25,11 +25,15 @@ function html() {
         .pipe(htmlreplace({
             'css': 'style.min.css',
             'js': 'script.min.js'
-        }))
+        },
+            {
+                keepBlockTags: false,
+            }
+        ))
         //minify html
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest('./dist'))
-    // .pipe(browserSync.stream());
+        .pipe(browserSync.stream());
 }
 function style() {
     var plugins = [
@@ -48,6 +52,7 @@ function style() {
             suffix: '.min'
         }))
         .pipe(gulp.dest('./dist/css/'))
+        .pipe(browserSync.stream());
 }
 function scripts() {
     //minify
@@ -58,6 +63,7 @@ function scripts() {
             suffix: '.min'
         }))
         .pipe(gulp.dest('./dist/js'))
+        .pipe(browserSync.reload())
 }
 function watch() {
     browserSync.init({
@@ -66,6 +72,7 @@ function watch() {
             index: "index.html"
         }
     });
+    browserSync.reload()
     gulp.watch('app/*.html', html);
     gulp.watch('./app/*.html').on('change', browserSync.reload);
     gulp.watch('app/scss/**/*.scss', style);
