@@ -9,7 +9,7 @@ var sass = require('gulp-sass');
 //PostCSS gulp plugin to pipe CSS through several plugins, but parse CSS only once.
 var postcss = require('gulp-postcss');
 //autoprefixer
-var autoprefixer = require('gulp-autoprefixer');
+var autoprefixer = require('autoprefixer');
 //optimize css
 var cssnano = require('cssnano');
 //combine js files
@@ -32,12 +32,17 @@ function html() {
     // .pipe(browserSync.stream());
 }
 function style() {
+    var plugins = [
+        autoprefixer(),
+        cssnano()
+    ];
+
     return gulp.src('./app/scss/style.scss')
         .pipe(sass()) // Converts Sass to CSS with gulp-sass
         //parse CSS once
         //autoprefixer
         //optimization
-        .pipe(postcss(autoprefixer({ browsers: ['last 1 version'] }), cssnano()))
+        .pipe(postcss(plugins))
         .pipe(gulp.dest('./app/css/'))
 }
 function script() {
@@ -54,5 +59,5 @@ function watch() {
     gulp.watch('./app/*.html').on('change', browserSync.reload);
 }
 exports.html = html;
-exports.html = html;
+exports.style = style;
 exports.watch = watch;
