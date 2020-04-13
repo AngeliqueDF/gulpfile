@@ -20,7 +20,7 @@ var terser = require('gulp-terser');
 const browserSync = require('browser-sync').create();
 
 function html() {
-    return gulp.src('./app/index.html')
+    return gulp.src('./src/index.html')
         //replace file paths in html
         .pipe(htmlreplace({
             'css': 'style.min.css',
@@ -41,9 +41,9 @@ function style() {
         cssnano()
     ];
 
-    return gulp.src('./app/scss/style.scss')
+    return gulp.src('./src/scss/style.scss')
         .pipe(sass()) // Converts Sass to CSS with gulp-sass
-        .pipe(gulp.dest('./app/css/'))
+        .pipe(gulp.dest('./src/css/'))
         //parse CSS once
         //autoprefixer
         //optimization
@@ -56,7 +56,7 @@ function style() {
 }
 function scripts() {
     //minify
-    return gulp.src('./app/js/script.js')
+    return gulp.src('./src/js/script.js')
         .pipe(terser())
         .pipe(rename({
             //rename
@@ -68,17 +68,17 @@ function scripts() {
 function watch() {
     browserSync.init({
         server: {
-            baseDir: "./app",
+            baseDir: "./src",
             index: "index.html"
         }
     });
     browserSync.reload()
-    gulp.watch('app/*.html', html);
-    gulp.watch('./app/*.html').on('change', browserSync.reload);
-    gulp.watch('app/scss/**/*.scss', style);
-    gulp.watch('app/scss/**/*.scss').on('change', browserSync.reload);
-    gulp.watch('app/js/**/*.js', scripts);
-    gulp.watch('app/js/**/*.js').on('change', browserSync.reload);
+    gulp.watch('src/*.html', html);
+    gulp.watch('./src/*.html').on('change', browserSync.reload);
+    gulp.watch('src/scss/**/*.scss', style);
+    gulp.watch('src/scss/**/*.scss').on('change', browserSync.reload);
+    gulp.watch('src/js/**/*.js', scripts);
+    gulp.watch('src/js/**/*.js').on('change', browserSync.reload);
 }
 exports.html = html;
 exports.style = style;
