@@ -14,10 +14,8 @@ var autoprefixer = require('autoprefixer');
 var cssnano = require('cssnano');
 //rename files, add .min
 var rename = require('gulp-rename');
-//combine js files
-
-//minify js files
-
+//minify js files, es6 compatible
+var terser = require('gulp-terser');
 //live reload
 const browserSync = require('browser-sync').create();
 
@@ -51,8 +49,15 @@ function style() {
         }))
         .pipe(gulp.dest('./dist/css/'))
 }
-function script() {
-    pass
+function scripts() {
+    //minify
+    return gulp.src('./app/js/script.js')
+        .pipe(terser())
+        .pipe(rename({
+            //rename
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest('./dist/js'))
 }
 function watch() {
     browserSync.init({
@@ -65,7 +70,10 @@ function watch() {
     gulp.watch('./app/*.html').on('change', browserSync.reload);
     gulp.watch('app/scss/**/*.scss', style);
     gulp.watch('app/scss/**/*.scss').on('change', browserSync.reload);
+    gulp.watch('app/js/**/*.js', scripts);
+    gulp.watch('app/js/**/*.js').on('change', browserSync.reload);
 }
 exports.html = html;
 exports.style = style;
+exports.scripts = scripts;
 exports.watch = watch;
