@@ -37,16 +37,13 @@ function html() {
 }
 function style() {
     var plugins = [
+        //config in .browserslistrc
         autoprefixer(),
         cssnano()
     ];
 
     return gulp.src('./src/scss/style.scss')
-        .pipe(sass()) // Converts Sass to CSS with gulp-sass
-        .pipe(gulp.dest('./src/css/'))
-        //parse CSS once
-        //autoprefixer
-        //optimization
+        .pipe(sass())
         .pipe(postcss(plugins))
         .pipe(rename({
             suffix: '.min'
@@ -59,7 +56,6 @@ function scripts() {
     return gulp.src('./src/js/script.js')
         .pipe(terser())
         .pipe(rename({
-            //rename
             suffix: '.min'
         }))
         .pipe(gulp.dest('./dist/js'))
